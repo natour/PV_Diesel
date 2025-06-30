@@ -35,12 +35,13 @@ def generate_load_profile(days, mode="random", hourly_values=None):
     else:
         raise ValueError("Invalid load input")
 
-def simulate_energy_balance(pv_output, load_profile, diesel_l_per_kwh, generator_size_kw, min_gen_loading_pct, pv_enabled=True):
+def simulate_energy_balance(pv_output, load_profile, diesel_l_per_kwh, generator_size_kw, min_gen_loading_pct, pv_enabled=True,gen_size_kw ):
     hours = len(load_profile)
     gen_output = np.zeros(hours)
     pv_used = np.zeros(hours)
     diesel_liters = np.zeros(hours)
     min_loading_kw = generator_size_kw * min_gen_loading_pct / 100
+    gen_size_kw =gen_size_kw 
 
     for i in range(hours):
         load = load_profile[i]
@@ -66,12 +67,12 @@ def simulate_energy_balance(pv_output, load_profile, diesel_l_per_kwh, generator
                 pv_used[i]=load-gen_load
                 if pv_used[i]>pv:
                     pv_used[i]=pv
-                    gen_load = load-pv
-                gen_output[i]=gen_load# -pv_used[i]# min_loading_kw
+                    gen_load = min(gen_size_kw ,load-pv)
+                gen_output[i]=min(gen_load,gen_size_kw )# -pv_used[i]# min_loading_kw
                 diesel_liters[i] = gen_output[i] * diesel_l_per_kwh
                 # else:
                 #     pv_used[i]= min(pv,load-min_loading_kw)
-                #     gen_output[i]=load-pv_used[i]
+                #     gen_output[i]=min(gen_size_kw ,load-pv_used[i])
                 #     gen_load =load-pv_used[i]
                 #     diesel_liters[i] = gen_load * diesel_l_per_kwh
                     
