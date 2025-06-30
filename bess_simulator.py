@@ -35,7 +35,7 @@ def generate_load_profile(days, mode="random", hourly_values=None):
     else:
         raise ValueError("Invalid load input")
 
-def simulate_energy_balance(pv_output, load_profile, diesel_l_per_kwh, generator_size_kw, min_gen_loading_pct, pv_enabled=True,gen_size_kw ):
+def simulate_energy_balance(pv_output, load_profile, diesel_l_per_kwh, generator_size_kw, min_gen_loading_pct, pv_enabled=True,gen_size_kw=100 ):
     hours = len(load_profile)
     gen_output = np.zeros(hours)
     pv_used = np.zeros(hours)
