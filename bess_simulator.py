@@ -59,9 +59,14 @@ def simulate_energy_balance(pv_output, load_profile, diesel_l_per_kwh, generator
                  diesel_liters[i] = gen_load * diesel_l_per_kwh
 
             elif load>min_loading_kw:
-                if pv>min_loading_kw:
-                    pv_used[i]=min(pv,load-min_loading_kw)
+                    
+                if True:
+                    
                     gen_load = min_loading_kw 
+                    pv_used[i]=load-gen_load
+                    if pv_used[I]>pv:
+                         pv_used[I]=pv
+                         gen_load = load-pv
                     gen_output[i]=gen_load# -pv_used[i]# min_loading_kw
                     diesel_liters[i] = gen_output[i] * diesel_l_per_kwh
                 else:
