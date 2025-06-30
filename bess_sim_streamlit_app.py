@@ -121,7 +121,7 @@ with tab5:
     uncovered_mask = total_supply < load
 
     # Condition 2: PV > 2x Gen (Undersized Generator)
-    undersized_mask = pv > (2 * gen)
+    undersized_mask = pv > ( gen_size_kw )
 
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.plot(df["Time"], load, label="Load", color="orange")
