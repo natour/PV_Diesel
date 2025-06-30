@@ -51,7 +51,8 @@ results = simulate_energy_balance(
     diesel_l_per_kwh=diesel_l_kwh,
     generator_size_kw=gen_size_kw,
     min_gen_loading_pct=min_loading_pct,
-    pv_enabled=pv_enabled
+    pv_enabled=pv_enabled,
+    gen_size_kw =gen_size_kw 
 )
 
 times = times.tz_localize(None)
