@@ -109,12 +109,31 @@ with tab4:
     st.pyplot(fig)
 
 with tab5:
-    st.write("### Power Overview")
-    fig, ax = plt.subplots(figsize=(10, 3))
-    ax.plot(df["Time"], df["Load (kW)"], label="Load", color="orange")
-    ax.plot(df["Time"], df["PV Used (kW)"], label="PV", color="blue")
-    ax.plot(df["Time"], df["Generator Output (kW)"], label="Generator", color="green")
-    ax.set_ylabel("kW")
+    st.write("### Power Overview with Issue Highlights")
+
+    pv = df["PV Used (kW)"]
+    gen = df["Generator Output (kW)"]
+    load = df["Load (kW)"]
+    total_supply = pv + gen
+
+    # Condition 1: PV + Gen < Load (Uncovered Load)
+    uncovered_mask = total_supply < load
+
+    # Condition 2: PV > 2x Gen (Undersized Generator)
+    undersized_mask = pv > (2 * gen)
+
+    fig, ax = plt.subplots(figsize=(12, 4))
+    ax.plot(df["Time"], load, label="Load", color="orange")
+    ax.plot(df["Time"], pv, label="PV", color="blue")
+    ax.plot(df["Time"], gen, label="Generator", color="green")
+
+    # Highlight uncovered load in red
+    ax.fill_between(df["Time"], 0, load, where=uncovered_mask, color='red', alpha=0.3, label="Uncovered Load")
+
+    # Highlight oversized PV vs gen in orange
+    ax.fill_between(df["Time"], 0, pv, where=undersized_mask, color='orange', alpha=0.3, label="Undersized Gen")
+
+    ax.set_ylabel("Power (kW)")
     ax.set_xlabel("Time")
     ax.legend()
     ax.tick_params(axis='x', rotation=45)
